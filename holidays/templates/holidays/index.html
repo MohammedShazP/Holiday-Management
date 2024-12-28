@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Holidays Management</h2>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form action="" id="form">
+                    <div class="mb-3">
+                        <label for="" class="form-label">Country</label>
+                        <input type="text" id="country" class="form-control" placeholder="Enter the country code.">
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Year</label>
+                        <input type="integer" id="year"class="form-control" placeholder="Enter the year.">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Holidays</button>
+                </form>
+                <div class="mt-5" id="holidays"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('form').addEventListener('submit',function(event){
+            event.preventDefault();
+
+            const country = document.getElementById("country").value;
+            const year = document.getElementById("year").value;
+
+            const apiUrl = `http://127.0.0.1:8000/holidays/${country}/${year}/`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        let holidayHtml = "<h2>Holidays:</h2><ul class='list-group'>";
+                        data.forEach(holiday=>{
+                            holidayHtml += `<li class='list-group-item'>${holiday.name} - ${holiday.date}</li>`;
+
+                        });
+                holidays.innerHTML += '</ul>';
+                document.getElementById("holidays").innerHTML = holidayHtml;
+            }else{
+                document.getElementById("holidayList").innerHTML = "<p>No holidays found.</p>";
+            }
+        })
+            .catch(error => {
+                console.log("Error",error);
+                document.getElementById("holidays").innerHTML = "<p>There was an error..</p>";
+                });
+            });
+    </script>
+
+</body>
